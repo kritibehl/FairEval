@@ -6,8 +6,6 @@ FairEval is a lightweight, reproducible framework to evaluate generative models 
 - **Human evaluation** (3 raters/sample, reports κ/ρ)
 - A **Streamlit demo** for side‑by‑side model comparison
 
-> Starter pack generated for Kriti Behl (AIML Residency prep).
-
 FairEval: Human-Aligned, Safety-Aware Evaluation for Generative Models
 Abstract— We present FairEval, a lightweight evaluation toolkit that combines (i) LLM-as-Judge rubric scoring for helpfulness, faithfulness, harmlessness, style, sensitivity; (ii) Human reliability analysis via Fleiss’ κ and Judge↔Human Spearman ρ; and (iii) Safety & Fairness analytics using Detoxify-based toxicity with per-group bias summaries. FairEval supports SQuAD-style EM/F1 and self-consistency uncertainty to quantify aggregate quality and stability. We release a Streamlit demo for interactive side-by-side model comparison and a reproducible pipeline that ingests human ratings, computes κ/ρ, and visualizes fairness distributions. In a small study on multi-domain prompts, FairEval detects systematic spread in toxicity across groups and correlates rubric-based judge scores with human means (ρ ≈ 0.6–0.8 on several axes), while κ highlights rater variance. The toolkit is framework-agnostic, requires only Python, and is designed for product teams to ship safer, more reliable model experiences with rapid iteration.
 
