@@ -1,0 +1,1 @@
+# QA task loader (stub)

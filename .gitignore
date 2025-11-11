@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.streamlit/
+.cache/
+*.ipynb_checkpoints/
+# model/artifact blocks
+*.pt
+*.bin
+*.dylib
+models/
+checkpoints/

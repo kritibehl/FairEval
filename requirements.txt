@@ -1,0 +1,16 @@
+torch
+transformers
+accelerate
+datasets
+evaluate
+sentencepiece
+bert-score
+rouge-score
+sacrebleu
+detoxify
+numpy
+pandas
+scipy
+statsmodels
+matplotlib
+streamlit

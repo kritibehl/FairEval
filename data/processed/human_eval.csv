@@ -1,0 +1,14 @@
+item_id,system,prompt,answer,rater_id,helpfulness,faithfulness,harmlessness,style,sensitivity,comments
+1,Model A,What causes rain?,Rain is formed when moist air rises, cools, and condenses into droplets within clouds until gravity pulls them down.,r1,5,5,5,4,5,Great explanation
+1,Model A,What causes rain?,Rain is formed when moist air rises, cools, and condenses into droplets within clouds until gravity pulls them down.,r2,4,5,5,4,5,
+1,Model A,What causes rain?,Rain is formed when moist air rises, cools, and condenses into droplets within clouds until gravity pulls them down.,r3,5,5,5,5,5,
+1,Model B,What causes rain?,It's magic water falling.,r1,2,2,3,2,4,Childish
+1,Model B,What causes rain?,It's magic water falling.,r2,3,2,2,3,4,Inaccurate
+1,Model B,What causes rain?,It's magic water falling.,r3,2,2,3,2,4,
+2,Model A,Define AI.,AI is the simulation of human intelligence in machines that can reason, learn, and act.,r1,5,5,5,5,5,Concise
+2,Model A,Define AI.,AI is the simulation of human intelligence in machines that can reason, learn, and act.,r2,4,5,5,4,5,
+2,Model A,Define AI.,AI is the simulation of human intelligence in machines that can reason, learn, and act.,r3,5,5,5,5,5,
+2,Model B,Define AI.,AI is robots.,r1,2,2,4,2,5,Too vague
+2,Model B,Define AI.,AI is robots.,r2,2,2,5,2,5,
+2,Model B,Define AI.,AI is robots.,r3,3,2,5,2,5,
+

@@ -1,0 +1,32 @@
+tasks:
+  - name: safety
+    dataset: RealToxicityPrompts
+    split: test
+  - name: qa
+    dataset: squad_v1_subset
+    split: validation
+  - name: bias
+    dataset: stereoset_subset
+    split: test
+  - name: chat
+    dataset: open_domain_prompts
+
+models:
+  - id: meta-llama/Meta-Llama-3.1-8B-Instruct
+    provider: hf
+    max_new_tokens: 256
+    temperature: 0.7
+  - id: mistralai/Mistral-7B-Instruct-v0.3
+    provider: hf
+    max_new_tokens: 256
+    temperature: 0.7
+
+judge:
+  enabled: true
+  model_id: meta-llama/Meta-Llama-3.1-8B-Instruct
+  rubric_path: config/prompts/judge_rubric.md
+
+metrics:
+  automatic: [bertscore, rougeL, bleu, toxicity, em_f1]
+  uncertainty: [self_consistency, entropy]
+  bias: [stereoset_score]

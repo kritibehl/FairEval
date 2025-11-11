@@ -1,0 +1,74 @@
+from __future__ import annotations
+import math
+from dataclasses import dataclass
+from typing import Dict, List
+import numpy as np
+import pandas as pd
+from scipy.stats import spearmanr
+from pipelines.judge import judge
+
+AXES = ["helpfulness", "faithfulness", "harmlessness", "style", "sensitivity"]
+
+@dataclass
+class AgreementResult:
+    fleiss_kappa: Dict[str, float]
+    judge_vs_human_rho: Dict[str, float]
+    n_items: int
+    n_ratings: int
+    systems: List[str]
+
+def _coerce_0_5(x) -> int:
+    try:
+        v = float(x)
+    except Exception:
+        return 0
+    return int(round(min(5.0, max(0.0, v))))
+
+def load_human_csv(path: str) -> pd.DataFrame:
+    df = pd.read_csv(path)
+    required = {"item_id","system","prompt","answer","rater_id",*AXES}
+    missing = required - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing columns: {sorted(missing)}")
+    for c in AXES: df[c] = df[c].apply(_coerce_0_5).astype(int)
+    return df
+
+def _fleiss_kappa_from_counts(n_ij: np.ndarray) -> float:
+    N, k = n_ij.shape
+    if N == 0: return float("nan")
+    n = n_ij.sum(axis=1)
+    P_i = ((n_ij*(n_ij-1)).sum(1)/(n*(n-1)))
+    P_bar = P_i.mean()
+    p_j = n_ij.sum(0)/n.sum()
+    P_e = (p_j**2).sum()
+    return float((P_bar-P_e)/(1-P_e)) if 1-P_e != 0 else float("nan")
+
+def compute_fleiss_kappa(df: pd.DataFrame) -> Dict[str,float]:
+    out = {}
+    for ax in AXES:
+        grp = df.groupby(["item_id","system"])[ax].apply(lambda g: np.bincount(g, minlength=6))
+        mat = np.vstack(grp.values)
+        out[ax] = _fleiss_kappa_from_counts(mat)
+    return out
+
+def compute_judge_vs_human_rho(df: pd.DataFrame, rubric_text: str) -> Dict[str,float]:
+    mean_df = df.groupby(["item_id","system"],as_index=False)[AXES].mean()
+    judge_df = []
+    for _,row in mean_df.iterrows():
+        s = judge(row["prompt"], row["answer"], rubric_text)
+        judge_df.append({"item_id":row["item_id"],"system":row["system"],**{a:s[a] for a in AXES}})
+    judge_df = pd.DataFrame(judge_df)
+    merged = mean_df.merge(judge_df,on=["item_id","system"],suffixes=("_human","_judge"))
+    return {ax:spearmanr(merged[f"{ax}_human"],merged[f"{ax}_judge"])[0] for ax in AXES}
+
+def summarize_agreement(df: pd.DataFrame, rubric_text: str) -> AgreementResult:
+    fleiss = compute_fleiss_kappa(df)
+    rho = compute_judge_vs_human_rho(df, rubric_text)
+    return AgreementResult(
+        fleiss_kappa=fleiss,
+        judge_vs_human_rho=rho,
+        n_items=df[["item_id","system"]].drop_duplicates().shape[0],
+        n_ratings=df.shape[0],
+        systems=sorted(df["system"].unique())
+    )
+# CSV → form → JSON aggregator (stub)
