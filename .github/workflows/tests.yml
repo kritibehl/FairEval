@@ -1,0 +1,27 @@
+name: tests
+on:
+  push:
+    branches: [ main, chore/metrics-cleanup ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dev deps
+        run: pip install -r requirements-dev.txt
+      - name: Run pytest with coverage
+        run: python -m pytest -v --maxfail=3 --disable-warnings
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: |
+            coverage.xml
+            htmlcov/
+          if-no-files-found: warn
