@@ -25,3 +25,13 @@ jobs:
             coverage.xml
             htmlcov/
           if-no-files-found: warn
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          # For public repos you can omit the token line entirely.
+          # token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          flags: unittests
+          fail_ci_if_error: false
+          verbose: true
+
