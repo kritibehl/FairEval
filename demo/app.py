@@ -1,5 +1,4 @@
 # app.py
-import os
 import sys
 from pathlib import Path
 
@@ -7,18 +6,18 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-# --- Make sure "src" is importable no matter where you run from ---
+# ---------- Make sure "src" is importable no matter where you run from ----------
 ROOT = Path(__file__).resolve().parents[1]  # repo root
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# --- Project imports ---
+# ---------- Project imports ----------
 from src.pipelines.judge import judge
-from src.pipelines.human_eval import load_human_csv, summarize_agreement, AXES
+from src.pipelines.human_eval import load_human_csv, summarize_agreement, AXES  # noqa: F401
 from src.pipelines.metrics import (
     toxicity_score,
     summarize_scores,
-    toxicity_breakdown,  # per-category scores
+    toxicity_breakdown,   # per-category scores
 )
 
 # ---------- Helpers ----------
@@ -99,7 +98,7 @@ with right:
         score_a = judge(prompt, out_a, rubric_text)
         score_b = judge(prompt, out_b, rubric_text)
 
-        # Composite toxicity (single score per output)
+        # Composite toxicity (single score per output; safe even if Detoxify unavailable)
         tox_a = toxicity_score(out_a)
         tox_b = toxicity_score(out_b)
 
@@ -117,6 +116,47 @@ with right:
             show_toxicity_breakdown("Model A", tox_a_breakdown)
         with c2:
             show_toxicity_breakdown("Model B", tox_b_breakdown)
+
+        # ---------- 📥 Exports ----------
+        # Create a compact summary table for download
+        def _to_scalar(x):
+            if isinstance(x, (int, float)):
+                return float(x)
+            if isinstance(x, dict):
+                return float(x.get("score", x.get("composite", 0.0)))
+            return x
+
+        export_rows = [
+            {
+                "model": "A",
+                "rubric_score": _to_scalar(score_a),
+                "toxicity_composite": float(tox_a),
+                "toxicity_breakdown": ";".join(f"{k}:{v:.4f}" for k, v in tox_a_breakdown.items()),
+            },
+            {
+                "model": "B",
+                "rubric_score": _to_scalar(score_b),
+                "toxicity_composite": float(tox_b),
+                "toxicity_breakdown": ";".join(f"{k}:{v:.4f}" for k, v in tox_b_breakdown.items()),
+            },
+        ]
+        export_df = pd.DataFrame(export_rows)
+
+        d1, d2 = st.columns(2)
+        with d1:
+            st.download_button(
+                "⬇️ Download summary (CSV)",
+                data=export_df.to_csv(index=False).encode("utf-8"),
+                file_name="faireval_summary.csv",
+                mime="text/csv",
+            )
+        with d2:
+            st.download_button(
+                "⬇️ Download summary (JSON)",
+                data=export_df.to_json(orient="records", indent=2).encode("utf-8"),
+                file_name="faireval_summary.json",
+                mime="application/json",
+            )
     else:
         st.info("Enter outputs on the left, then click **Score Both**.")
 
@@ -172,7 +212,7 @@ with col2:
         from src.pipelines.metrics import estimate_uncertainty
 
         if scores_text.strip():
-            scores = [float(x) for x in scores_text.split(",")]
+            scores = [float(x) for x in scores_text.split(",") if x.strip()]
             st.json(estimate_uncertainty(scores))
 
 # ---------- Fairness & Toxicity Dashboard ----------
@@ -232,6 +272,25 @@ if csv_file is not None:
         )
         st.altair_chart(kde, use_container_width=True)
 
-        # Global stats
+        # Global stats + exports
         st.write("**Global Toxicity Stats**")
-        st.json(summarize_scores(df))
+        global_stats = summarize_scores(df)
+        st.json(global_stats)
+
+        e1, e2 = st.columns(2)
+        with e1:
+            st.download_button(
+                "⬇️ Download per-group summary (CSV)",
+                data=grp.to_csv(index=False).encode("utf-8"),
+                file_name="per_group_toxicity.csv",
+                mime="text/csv",
+            )
+        with e2:
+            st.download_button(
+                "⬇️ Download scored rows (CSV)",
+                data=df.to_csv(index=False).encode("utf-8"),
+                file_name="scored_rows.csv",
+                mime="text/csv",
+            )
+else:
+    st.caption("Tip: include multiple groups to see the dashboard plots.")

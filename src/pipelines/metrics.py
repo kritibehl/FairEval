@@ -1,6 +1,7 @@
 # src/pipelines/metrics.py
 from __future__ import annotations
-from typing import Dict, List
+from typing import Dict, List, Any
+from functools import lru_cache
 import numpy as np
 import pandas as pd
 from dataclasses import dataclass
@@ -211,3 +212,45 @@ def toxicity_breakdown(text: str) -> Dict[str, float]:
     out = model.predict([text])
     # convert any list values like [0.0123] -> 0.0123
     return {k: (v[0] if isinstance(v, (list, tuple)) and v else float(v)) for k, v in out.items()}
+
+def _safe_get_detox():
+    """
+    Returns a Detoxify model or None if loading fails (offline/SSL/etc).
+    We never raise to the caller.
+    """
+    try:
+        from detoxify import Detoxify
+        # Try unbiased; Detoxify will cache weights under ~/.cache/torch
+        return Detoxify("unbiased")
+    except Exception as e:
+        # Log-friendly: return None, callers will soft-fallback
+        print(f"[FairEval] Detoxify unavailable: {e}")
+        return None
+
+def toxicity_breakdown(text: str) -> Dict[str, float]:
+    """
+    Returns per-category toxicity scores. If model unavailable, returns {}.
+    """
+    model = _safe_get_detox()
+    if not model or not text:
+        return {}
+    try:
+        scores = model.predict(text)
+        # ensure plain floats
+        return {k: float(v) for k, v in scores.items()}
+    except Exception as e:
+        print(f"[FairEval] Detoxify predict failed: {e}")
+        return {}
+
+def toxicity_score(text: str) -> float:
+    """
+    Returns a single composite toxicity score in [0,1].
+    If model unavailable or fails, returns 0.0 (neutral) so app never crashes.
+    """
+    bd = toxicity_breakdown(text)
+    if not bd:
+        return 0.0
+    # common primary key; otherwise take mean of all categories
+    if "toxicity" in bd:
+        return float(bd["toxicity"])
+    return float(sum(bd.values()) / max(1, len(bd)))
