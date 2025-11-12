@@ -1,23 +1,45 @@
-# FairEval — Human‑Aligned Evaluation for Generative Models
+# 🧠 FairEval — Human-Aligned Evaluation for Generative Models
 
-FairEval is a lightweight, reproducible framework to evaluate generative models across **safety, fairness, factuality, coherence, and uncertainty** using:
-- **Automatic metrics** (toxicity, bias slices, EM/F1, ROUGE/BERTScore)
-- **LLM‑as‑Judge** with a 5‑axis rubric (Helpfulness, Faithfulness, Harmlessness, Style, Sensitivity)
-- **Human evaluation** (3 raters/sample, reports κ/ρ)
-- A **Streamlit demo** for side‑by‑side model comparison
+![Tests](https://github.com/kritibehl/FairEval/actions/workflows/tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/kritibehl/FairEval/branch/main/graph/badge.svg)](https://codecov.io/gh/kritibehl/FairEval)
 
-FairEval: Human-Aligned, Safety-Aware Evaluation for Generative Models
-Abstract— We present FairEval, a lightweight evaluation toolkit that combines (i) LLM-as-Judge rubric scoring for helpfulness, faithfulness, harmlessness, style, sensitivity; (ii) Human reliability analysis via Fleiss’ κ and Judge↔Human Spearman ρ; and (iii) Safety & Fairness analytics using Detoxify-based toxicity with per-group bias summaries. FairEval supports SQuAD-style EM/F1 and self-consistency uncertainty to quantify aggregate quality and stability. We release a Streamlit demo for interactive side-by-side model comparison and a reproducible pipeline that ingests human ratings, computes κ/ρ, and visualizes fairness distributions. In a small study on multi-domain prompts, FairEval detects systematic spread in toxicity across groups and correlates rubric-based judge scores with human means (ρ ≈ 0.6–0.8 on several axes), while κ highlights rater variance. The toolkit is framework-agnostic, requires only Python, and is designed for product teams to ship safer, more reliable model experiences with rapid iteration.
+**FairEval** is a lightweight, reproducible framework for evaluating generative models across **safety, fairness, factuality, coherence, and uncertainty** using:
+- **Automatic metrics** — toxicity, bias slices, EM/F1, ROUGE, BERTScore  
+- **LLM-as-Judge** — 5-axis rubric (Helpfulness, Faithfulness, Harmlessness, Style, Sensitivity)  
+- **Human evaluation** — 3 raters/sample, reporting κ and ρ  
+- **Streamlit demo** — side-by-side model comparison  
 
-## Quickstart
+---
+
+## ✨ Overview
+FairEval unifies **automatic**, **LLM-based**, and **human** evaluations to measure both model quality and ethical alignment.  
+It provides an end-to-end pipeline for:
+- ⚙️ Metric computation and aggregation  
+- 🧮 Human-AI agreement analysis (Fleiss’ κ, Spearman ρ)  
+- 🧩 Fairness & toxicity analytics using Detoxify  
+- 📊 Uncertainty estimation for stability checks  
+- 🎛️ A Streamlit dashboard for model-to-model comparisons  
+
+---
+
+## 🧾 Abstract
+**FairEval: Human-Aligned, Safety-Aware Evaluation for Generative Models**  
+We present FairEval, a reproducible evaluation toolkit that combines:
+1. **LLM-as-Judge rubric scoring** across helpfulness, faithfulness, harmlessness, style, and sensitivity  
+2. **Human reliability analysis** via Fleiss’ κ and Judge↔Human Spearman ρ  
+3. **Safety & Fairness analytics** with Detoxify-based toxicity and bias slice reporting  
+
+FairEval supports SQuAD-style EM/F1, BERTScore, and self-consistency uncertainty estimation to quantify model reliability.  
+A Streamlit demo enables interactive, side-by-side model evaluation, while a reproducible pipeline ingests human ratings, computes reliability metrics, and visualizes fairness distributions.  
+The framework is Python-only, lightweight, and designed for product and research teams seeking to ship safer, more trustworthy model experiences.
+
+---
+
+## 🚀 Quickstart
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run demo/app.py
-```
-
-## Repo layout
-```
 faireval/
 ├─ config/
 │  ├─ tasks.yaml
@@ -32,10 +54,4 @@ faireval/
 ├─ demo/app.py
 ├─ docs/
 └─ eval_runs/
-```
 
-## Status
-This is an MVP scaffold. Fill in `src/pipelines/*.py` to go live.
-
-## License
-MIT
