@@ -35,6 +35,10 @@ The framework is Python-only, lightweight, and designed for product and research
 
 ---
 
+🔗 Medium Article:
+“FairEval — A Human-Aligned Evaluation Framework for Generative Models”
+https://medium.com/@kriti0608/faireval-a-human-aligned-evaluation-framework-for-generative-models-d822bfd5c99d
+
 ## 🚀 Quickstart
 ```bash
 python -m venv .venv && source .venv/bin/activate
