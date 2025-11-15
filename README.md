@@ -1,4 +1,4 @@
-# 🧠 FairEval — Human-Aligned Evaluation for Generative Models
+# FairEval — Human-Aligned Evaluation for Generative Models
 
 ![Tests](https://github.com/kritibehl/FairEval/actions/workflows/tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/kritibehl/FairEval/branch/main/graph/badge.svg)](https://codecov.io/gh/kritibehl/FairEval)
@@ -11,18 +11,18 @@
 
 ---
 
-## ✨ Overview
+## Overview
 FairEval unifies **automatic**, **LLM-based**, and **human** evaluations to measure both model quality and ethical alignment.  
 It provides an end-to-end pipeline for:
-- ⚙️ Metric computation and aggregation  
-- 🧮 Human-AI agreement analysis (Fleiss’ κ, Spearman ρ)  
-- 🧩 Fairness & toxicity analytics using Detoxify  
-- 📊 Uncertainty estimation for stability checks  
-- 🎛️ A Streamlit dashboard for model-to-model comparisons  
+- Metric computation and aggregation  
+- Human-AI agreement analysis (Fleiss’ κ, Spearman ρ)  
+- Fairness & toxicity analytics using Detoxify  
+- Uncertainty estimation for stability checks  
+- A Streamlit dashboard for model-to-model comparisons  
 
 ---
 
-## 🧾 Abstract
+## Abstract
 **FairEval: Human-Aligned, Safety-Aware Evaluation for Generative Models**  
 We present FairEval, a reproducible evaluation toolkit that combines:
 1. **LLM-as-Judge rubric scoring** across helpfulness, faithfulness, harmlessness, style, and sensitivity  
@@ -35,11 +35,11 @@ The framework is Python-only, lightweight, and designed for product and research
 
 ---
 
-🔗 Medium Article:
+Medium Article:
 “FairEval — A Human-Aligned Evaluation Framework for Generative Models”
 https://medium.com/@kriti0608/faireval-a-human-aligned-evaluation-framework-for-generative-models-d822bfd5c99d
 
-## 🚀 Quickstart
+## Quickstart
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
