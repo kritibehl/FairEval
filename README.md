@@ -39,6 +39,11 @@ Medium Article:
 “FairEval — A Human-Aligned Evaluation Framework for Generative Models”
 https://medium.com/@kriti0608/faireval-a-human-aligned-evaluation-framework-for-generative-models-d822bfd5c99d
 
+Citation  
+If you use FairEval, please cite:
+
+Behl, K. (2025). FairEval: Human-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.17625268
+
 ## Quickstart
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -59,3 +64,4 @@ faireval/
 ├─ docs/
 └─ eval_runs/
 
+an-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.17625268
