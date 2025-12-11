@@ -1,67 +1,80 @@
-# FairEval — Human-Aligned Evaluation for Generative Models
+# FairEval — Human-Aligned Evaluation Framework for Generative Models
 
 ![Tests](https://github.com/kritibehl/FairEval/actions/workflows/tests.yml/badge.svg)
 [![codecov](https://codecov.io/gh/kritibehl/FairEval/branch/main/graph/badge.svg)](https://codecov.io/gh/kritibehl/FairEval)
 
-**FairEval** is a lightweight, reproducible framework for evaluating generative models across **safety, fairness, factuality, coherence, and uncertainty** using:
-- **Automatic metrics** — toxicity, bias slices, EM/F1, ROUGE, BERTScore  
-- **LLM-as-Judge** — 5-axis rubric (Helpfulness, Faithfulness, Harmlessness, Style, Sensitivity)  
-- **Human evaluation** — 3 raters/sample, reporting κ and ρ  
-- **Streamlit demo** — side-by-side model comparison  
+FairEval is a reproducible evaluation framework for large language models designed to measure safety, fairness, factuality, hallucination behavior, clarity, and indirect intent understanding.  
+It integrates automatic metrics, LLM-as-judge scoring, and human evaluation into a unified system.
 
 ---
 
 ## Overview
-FairEval unifies **automatic**, **LLM-based**, and **human** evaluations to measure both model quality and ethical alignment.  
-It provides an end-to-end pipeline for:
-- Metric computation and aggregation  
-- Human-AI agreement analysis (Fleiss’ κ, Spearman ρ)  
-- Fairness & toxicity analytics using Detoxify  
-- Uncertainty estimation for stability checks  
-- A Streamlit dashboard for model-to-model comparisons  
+
+FairEval provides:
+
+- Automatic metrics (toxicity, EM/F1, ROUGE, BERTScore, hallucination checks)
+- LLM-as-Judge evaluation using a structured rubric (Helpfulness, Faithfulness, Harmlessness, Style, Sensitivity)
+- Human evaluation pipeline (multi-rater annotations, Fleiss’ κ, Spearman ρ)
+- Fairness and uncertainty analysis
+- Streamlit demo for side-by-side model comparisons
+- Config-driven, reproducible evaluation suites
 
 ---
 
 ## Abstract
-**FairEval: Human-Aligned, Safety-Aware Evaluation for Generative Models**  
-We present FairEval, a reproducible evaluation toolkit that combines:
-1. **LLM-as-Judge rubric scoring** across helpfulness, faithfulness, harmlessness, style, and sensitivity  
-2. **Human reliability analysis** via Fleiss’ κ and Judge↔Human Spearman ρ  
-3. **Safety & Fairness analytics** with Detoxify-based toxicity and bias slice reporting  
 
-FairEval supports SQuAD-style EM/F1, BERTScore, and self-consistency uncertainty estimation to quantify model reliability.  
-A Streamlit demo enables interactive, side-by-side model evaluation, while a reproducible pipeline ingests human ratings, computes reliability metrics, and visualizes fairness distributions.  
-The framework is Python-only, lightweight, and designed for product and research teams seeking to ship safer, more trustworthy model experiences.
+**FairEval: A Human-Aligned, Safety-Aware Evaluation Framework for Generative Models**
+
+FairEval combines three evaluation paradigms:
+
+1. LLM-as-Judge rubric scoring  
+2. Human reliability analysis  
+3. Automatic safety and fairness checks  
+
+It additionally supports EM/F1, ROUGE, BERTScore, self-consistency uncertainty, and toxicity analysis.  
+A Streamlit demo enables interactive model-to-model comparisons, while pipelines compute reliability and fairness metrics.
+
+The framework is Python-based, lightweight, and built for applied ML and research teams.
 
 ---
 
-Medium Article:
-“FairEval — A Human-Aligned Evaluation Framework for Generative Models”
+## Medium Article
+
+FairEval — A Human-Aligned Evaluation Framework for Generative Models  
 https://medium.com/@kriti0608/faireval-a-human-aligned-evaluation-framework-for-generative-models-d822bfd5c99d
 
-Citation  
+---
+
+## Citation
+
 If you use FairEval, please cite:
 
-Behl, K. (2025). FairEval: Human-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.17625268
+Behl, K. (2025). FairEval: Human-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo.  
+https://doi.org/10.5281/zenodo.17625268
+
+@software{Behl_FairEval_2025,
+author = {Kriti Behl},
+title = {FairEval: Human-Aligned Evaluation Framework for Generative Models},
+year = {2025},
+doi = {10.5281/zenodo.17625268},
+url = {https://doi.org/10.5281/zenodo.17625268}
+
+}
+
+
+---
 
 ## Quickstart
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run demo/app.py
-faireval/
-├─ config/
-│  ├─ tasks.yaml
-│  └─ prompts/judge_rubric.md
-├─ data/
-├─ src/
-│  ├─ pipelines/
-│  ├─ models/
-│  ├─ tasks/
-│  ├─ viz/
-│  └─ utils/
-├─ demo/app.py
-├─ docs/
-└─ eval_runs/
 
-an-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.17625268
+```bash
+python -m venv .venv
+source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+Run the Streamlit demo
+streamlit run demo/app.py
+
+Run an evaluation suite
+python -m faireval.cli run \
+  --config faireval/config/tasks.yaml
+
