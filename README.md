@@ -52,9 +52,6 @@ If you use FairEval, please cite:
 Behl, K. (2025). FairEval: Human-Aligned Evaluation Framework for Generative Models (v1.0.0). Zenodo.  
 https://doi.org/10.5281/zenodo.17625268
 
-}
-
-
 ---
 
 ## Quickstart
